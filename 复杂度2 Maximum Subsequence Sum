@@ -1,0 +1,42 @@
+#include<stdio.h>
+//求出最大子列和并找出起始元素
+//如果全为零则输出第一个值和最后一个值
+void FindMaxSum( int a[],int max,int *start,int *last)
+{
+	int i,j,MaxSum,ThisSum;
+	MaxSum = ThisSum = 0;
+	*start = a[1];
+	*last = a[max-1];
+				
+	for( i = 1; i < max; i++ ){
+		ThisSum = 0;
+		for ( j = i; j < max; j++ ){
+			ThisSum += a[j];
+			if ( ThisSum > MaxSum ){
+				MaxSum = ThisSum;
+				*start = a[i];
+				*last = a[j];
+			} 
+		}
+	}
+	printf("%d %d %d",MaxSum,*start,*last);
+ } 
+ 
+ //主函数部分
+ //实现动态数组的实现并赋值
+ int main()
+ {
+ 	int max ,i;
+ 	int *L;
+ 	int start,last;
+	 start = last = 0; 
+ 	
+	scanf("%d", &max);
+	L = ( int *)malloc( (max+1) * sizeof(int));
+	for ( i = 1;  i<(max+1); i++){
+		scanf("%d",&L[i]);
+	}
+	FindMaxSum( L ,( max+1 ),&start,&last);
+	return 0;
+ }
+ 
