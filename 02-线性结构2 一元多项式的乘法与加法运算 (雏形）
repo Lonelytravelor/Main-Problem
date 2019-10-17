@@ -1,0 +1,198 @@
+#include<stdio.h>
+#include<malloc.h>
+//声明结构体 
+struct ListNode;
+//重命名 
+typedef int Element;
+typedef struct ListNode *List;
+typedef struct ListNode *Position;
+
+//声明数组架构 
+struct ListNode{
+	Element coefficient;
+	Element index;
+	Position Next;
+};
+//建立一个空列表
+List SetList()
+{
+	List L = (List)malloc(sizeof(struct ListNode));
+	L->coefficient = L->index = -1;
+	L->Next = NULL;
+	
+	return L;
+ } 
+ //找到链表最后一个位置并返回
+ Position FindLast ( List L )
+ {
+ 	Position temp = L->Next;
+ 	
+ 	while( temp != NULL ){
+ 		temp = temp->Next;
+	 }
+	 return temp;
+  } 
+ /*
+//向表插入一个数据
+int Insert ( Element X1, Element X2, List L )
+{
+	Position P = FindLast( L );
+	Position T = ( List )malloc( sizeof( struct ListNode ));
+	
+	if ( T == NULL){
+		return 0;
+	}
+	T->coefficient = X1;
+	T->index = X2;
+	T->Next = NULL;
+	
+	P->Next = T;
+	return 1;
+  }  
+  */
+  
+  //链表读取数据
+  void read( List L )
+  {
+  	Position P = L;
+  	int i,k, X1 ,X2 ;
+  	scanf("%d ",&k);
+  	
+  	for( i = 0; i < k; i++ , P = P->Next ){
+  		scanf("%d %d",&X1,&X2);
+  		Position Temp = ( Position )malloc(sizeof (struct ListNode));
+  		Temp->coefficient = X1;
+  		Temp->index = X2;
+  		Temp->Next = NULL;
+  		P->Next = Temp;
+	  }
+   } 
+  //打印链表
+  void PrintList( List L )
+  {
+  	Position P = L->Next;
+  	
+  	if( P == NULL ){
+  		printf("链表为空"); 
+	  }
+	  else {
+	  	while( P != NULL ){
+	  		printf("%d %d ",P->coefficient,P->index);
+	  		P = P->Next;
+		  }
+	  }
+	  printf("\n");
+   } 
+  
+  //多项式相加
+  //通过改变指针的指向计算多项式的加法
+  //切记！！！这种方法会使原本两个链表产生变化 故应先算乘法
+List ListSum ( List L1, List L2 )
+{
+	Position Pa,Pb;
+	Pa = L1->Next;
+	Pb = L2->Next;
+	List P = SetList();
+	Position Temp = P;
+	
+	while( Pa != NULL && Pb != NULL ){
+		if( Pa->index > Pb->index ){
+			Temp->Next = Pa;
+			Pa = Pa->Next;
+			Temp = Temp->Next;
+		}
+		else
+		if ( Pa->index < Pb->index ){
+			Temp->Next = Pb;
+			Pb = Pb->Next;
+			Temp = Temp->Next;
+		}
+		else{
+			Pa->coefficient += Pb->coefficient;
+			Temp->Next = Pa;
+			Pa = Pa->Next;
+			Pb = Pb->Next;
+			Temp = Temp->Next;
+		}
+	}
+	if ( Pa == NULL ){
+		Temp->Next = Pb;
+	}else{
+		Temp->Next = Pa;
+	}
+	return P;
+}
+
+  //在合适的位置向表插入一个数据
+  //首先在内存中申请一个空间并将数据储存此空间中
+  //在寻找合适的位置
+  //如果链表没有数据那么直接插入
+  //有一个数据就判断插入的位置
+  //大于两个数据的时候就可以按照常规操作去插入数据
+void Insert ( Element X1, Element X2, List L )
+{
+	Position Temp;
+	Position P = L;
+	Position T = (Position)malloc(sizeof( struct ListNode ));
+	T->coefficient = X1;
+	T->index = X2;
+	T->Next = NULL;
+	
+	if ( P->Next == NULL ){
+		P->Next = T;
+	}
+	else{
+		while( P->Next->index > T->index && P->Next->Next != NULL ){
+			P = P->Next;
+		}
+		if (  P->Next->index > T->index ){
+			P->Next->Next = T;
+		}else
+		if(  P->Next->index == T->index ){
+			P->Next->coefficient += T->coefficient;
+		}else{
+			Temp = P->Next;
+			P->Next = T;
+			T->Next = Temp;
+		}
+	}
+  } 
+ //多项式相乘 
+ //二重循环算各个式子的结果然后插入到链表中
+ List ListProduct( List L1, List L2 )
+ {
+ 	Position Pa,Pb;
+	List P = SetList();
+ 	int X1,X2;
+ 	
+ 	if ( L1->Next == NULL || L2->Next == NULL ){
+ 		Insert( 0, 0, P);
+	 }else{
+	 	for(Pa = L1->Next; Pa != NULL; Pa = Pa->Next ){
+	 		for(Pb = L2->Next; Pb != NULL; Pb = Pb->Next ){
+	 			X1 = (Pa->coefficient) * (Pb->coefficient);
+	 			X2 = Pa->index + Pb->index;
+	 			printf("Pa->coefficient = %d Pb->coefficient = %d \n",Pa->coefficient,Pb->coefficient);
+	 			printf("X1 = %d X2 = %d \n",X1,X2);
+	 			Insert( X1, X2, P);
+				}
+			}
+		}
+	return P;
+}
+ 	
+int main()
+{
+	List Pa,Pb,sum,Product;
+	Pa = SetList();
+	Pb = SetList();
+	read(Pa);
+	read(Pb);
+	PrintList( Pa );
+	PrintList( Pb );
+	Product = ListProduct( Pa, Pb );
+	sum = ListSum ( Pa, Pb );
+	PrintList( sum );
+	PrintList( Product );
+	
+}
