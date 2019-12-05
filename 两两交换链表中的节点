@@ -1,0 +1,25 @@
+给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+题目来源：https://leetcode-cn.com/explore/orignial/card/recursion-i/256/principle-of-recursion/1201/
+
+给定要求：一个具有头结点的链表
+
+//递归两两交换地址
+List swapPairs(Position head){
+    if( head == NULL ){
+        return NULL;
+    }
+    else if( head->Next == NULL ){
+        return head;
+    }else{
+        Position Temp1,Temp2;
+        Temp1 = head->Next->Next;
+        Temp2 = head->Next;
+        head->Next->Next = head;
+        head->Next = swapPairs( Temp1 );
+        return Temp2;
+    }
+
+}
