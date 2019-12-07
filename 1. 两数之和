@@ -1,0 +1,18 @@
+
+给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标
+
+int* twoSum(int* nums, int numsSize, int target, int* returnSize){
+    int i , j;
+    returnSize = NULL;
+    for( i = 0; i < numsSize; i++ ){
+        for(  j = i + 1 ; j < numsSize; j++ ){
+            if( nums[i] + nums[j] == target ){
+                returnSize = (int*)malloc( sizeof ( int ) * 2 );
+                returnSize[0] = i;
+                returnSize[1] = j;
+                //return returnSize;
+            }
+        }
+    }
+    return returnSize;
+}
