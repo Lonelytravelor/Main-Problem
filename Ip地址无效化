@@ -1,0 +1,20 @@
+char * defangIPaddr(char * address){
+    int i,k = 0 ,len = strlen( address );
+    char *a = (char *)malloc(sizeof(char)*(len+7));
+    for( i = 0 ; i < len ; i++ ){
+        if( address[i] != '.' ){
+            a[ k++ ] = address[i];
+        }else{
+            a[ k++ ] = '[';
+            a[ k++ ] = address[i];
+            a[ k++ ] = ']';
+        }
+        a[k] = '\0';
+    }
+
+    return a;
+}
+
+/*在函数中想要返回一个数组，只能依靠malloc函数申请空间来返回地址，在函数中申请数组在函数结束时会销毁所申请的数组*/
+/*在ip中只有三个.来分隔三个数字坐标*/
+/*在保存一个字符串时使用char数组或者malloc申请的*char时应该多申请一个char空间，并在结束时在最后一个位置接上/0*/
